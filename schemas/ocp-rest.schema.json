@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ocp.dev/schemas/rest/1.0.0",
+  "title": "OCP REST Schema",
+  "description": "Open Config Protocol - REST API extension",
+  "allOf": [
+    { "$ref": "ocp-base.schema.json" }
+  ],
+  "properties": {
+    "$ocp": {
+      "properties": {
+        "type": { "const": "rest" }
+      }
+    },
+    "pagination": {
+      "type": "object",
+      "description": "Default pagination behavior for list endpoints",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["cursor", "offset", "page", "link"],
+          "description": "Pagination strategy"
+        },
+        "param_name": {
+          "type": "string",
+          "description": "Query parameter name for pagination"
+        },
+        "response_path": {
+          "type": "string",
+          "description": "Path to next page token in response (dot notation)"
+        },
+        "default_limit": { "type": "integer" },
+        "max_limit": { "type": "integer" },
+        "notes": { "type": "string" }
+      }
+    },
+    "endpoints": {
+      "type": "object",
+      "description": "API endpoints grouped by domain",
+      "additionalProperties": {
+        "$ref": "#/$defs/endpoint_group"
+      }
+    }
+  },
+  "$defs": {
+    "endpoint_group": {
+      "type": "object",
+      "description": "Group of related endpoints",
+      "additionalProperties": {
+        "$ref": "#/$defs/endpoint"
+      }
+    },
+    "endpoint": {
+      "type": "object",
+      "required": ["method", "path"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+        },
+        "path": {
+          "type": "string",
+          "description": "Endpoint path with :param placeholders"
+        },
+        "api_version": {
+          "type": "string",
+          "description": "API version (e.g., 'v1', 'v2')"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Brief description of what the endpoint does"
+        },
+        "params": {
+          "$ref": "#/$defs/params"
+        },
+        "query": {
+          "$ref": "#/$defs/params"
+        },
+        "body": {
+          "$ref": "#/$defs/body"
+        },
+        "response": {
+          "$ref": "#/$defs/response"
+        },
+        "required_scope": {
+          "type": "string",
+          "description": "OAuth scope required for this endpoint"
+        },
+        "pagination": {
+          "type": "boolean",
+          "description": "Whether this endpoint supports pagination",
+          "default": false
+        },
+        "notes": {
+          "type": "string",
+          "description": "Important quirks, gotchas, or clarifications"
+        },
+        "docs_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to official documentation"
+        }
+      }
+    },
+    "params": {
+      "type": "object",
+      "description": "Parameter definitions",
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string" },
+          { "$ref": "#/$defs/param_definition" }
+        ]
+      }
+    },
+    "param_definition": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["string", "integer", "number", "boolean", "array", "object"]
+        },
+        "required": { "type": "boolean", "default": false },
+        "description": { "type": "string" },
+        "default": {},
+        "enum": { "type": "array" },
+        "example": {}
+      }
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["object", "array"],
+          "default": "object"
+        },
+        "fields": {
+          "$ref": "#/$defs/params"
+        },
+        "example": {}
+      }
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Response type name (for type generation)"
+        },
+        "array": {
+          "type": "boolean",
+          "description": "Whether response is an array of the type",
+          "default": false
+        },
+        "fields": {
+          "$ref": "#/$defs/params"
+        }
+      }
+    }
+  }
+}

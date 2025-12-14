@@ -1,0 +1,36 @@
+{
+  "name": "ocp-api-codegen-node",
+  "version": "1.0.0",
+  "description": "Open Config Protocol - Node.js SDK generator for REST APIs",
+  "main": "lib/codegen.js",
+  "bin": {
+    "ocp-api-codegen": "./bin/ocp-api-codegen.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "schemas"
+  ],
+  "scripts": {
+    "test": "node bin/ocp-api-codegen.js --help"
+  },
+  "keywords": [
+    "ocp",
+    "open-config-protocol",
+    "codegen",
+    "sdk",
+    "api",
+    "rest",
+    "typescript",
+    "node"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourname/ocp-api-codegen-node"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

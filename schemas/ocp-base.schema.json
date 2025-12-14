@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ocp.dev/schemas/base/1.0.0",
+  "title": "OCP Base Schema",
+  "description": "Open Config Protocol - Base schema for API configurations",
+  "type": "object",
+  "required": ["$ocp", "meta"],
+  "properties": {
+    "$ocp": {
+      "type": "object",
+      "description": "OCP metadata identifying the schema type and version",
+      "required": ["type", "version"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["rest", "rpc", "graphql", "websocket"],
+          "description": "API type this configuration describes"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "OCP schema version (semver)"
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "description": "API metadata",
+      "required": ["name", "base_url"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "API identifier (lowercase, used for SDK naming)"
+        },
+        "base_url": {
+          "type": "string",
+          "description": "Base URL with optional {placeholders} for dynamic values"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable API description"
+        },
+        "auth": {
+          "$ref": "#/$defs/auth"
+        }
+      }
+    },
+    "rate_limiting": {
+      "type": "object",
+      "description": "Rate limiting configuration",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "description": "Number of requests allowed per interval"
+        },
+        "interval": {
+          "type": "string",
+          "enum": ["second", "minute", "hour", "day"],
+          "description": "Rate limit interval"
+        },
+        "headers": {
+          "type": "object",
+          "description": "Response headers containing rate limit info",
+          "properties": {
+            "limit": { "type": "string" },
+            "remaining": { "type": "string" },
+            "reset": { "type": "string" }
+          }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "errors": {
+      "type": "object",
+      "description": "Error response configuration",
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["json", "xml", "text"],
+          "default": "json"
+        },
+        "structure": {
+          "type": "object",
+          "description": "Error response shape",
+          "properties": {
+            "code_path": { "type": "string" },
+            "message_path": { "type": "string" }
+          }
+        },
+        "codes": {
+          "type": "object",
+          "description": "Common error codes and meanings",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "auth": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "none",
+            "api_key",
+            "basic",
+            "bearer",
+            "oauth2_client_credentials",
+            "oauth2_authorization_code",
+            "custom"
+          ]
+        },
+        "token_endpoint": {
+          "type": "string",
+          "description": "OAuth2 token endpoint path"
+        },
+        "header": {
+          "type": "string",
+          "description": "Header name for API key/token"
+        },
+        "prefix": {
+          "type": "string",
+          "description": "Token prefix (e.g., 'Bearer', 'Basic')"
+        },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

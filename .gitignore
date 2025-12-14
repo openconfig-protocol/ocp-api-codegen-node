@@ -1,0 +1,254 @@
+# ================================
+# Claude Code
+# ================================
+.claude/settings.local.json
+
+# ================================
+# Node.js
+# ================================
+
+# Dependencies
+node_modules/
+.npm
+.pnpm-store/
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Package manager caches
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# ================================
+# Build & Output
+# ================================
+
+# Build output directories
+dist/
+build/
+out/
+.output/
+
+# Generated SDK output (from this codegen tool)
+generated/
+sdk-output/
+
+# TypeScript build info
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# ================================
+# Testing & Coverage
+# ================================
+
+# Test coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# Jest
+.jest/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# ================================
+# Environment & Secrets
+# ================================
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+.env*.local
+
+# Secret files
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+credentials.json
+service-account*.json
+
+# ================================
+# IDE & Editors
+# ================================
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*.swn
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+
+# ================================
+# Operating System
+# ================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon?
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ================================
+# Logs & Debug
+# ================================
+
+# Logs
+logs/
+*.log
+logs
+*.log.*
+
+# Debug files
+*.pid
+*.seed
+*.pid.lock
+
+# Runtime data
+pids/
+
+# ================================
+# Temporary Files
+# ================================
+
+# Temp directories
+tmp/
+temp/
+.tmp/
+.temp/
+.cache/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# ================================
+# Documentation Build
+# ================================
+
+# Docusaurus
+.docusaurus/
+.cache-loader/
+
+# TypeDoc
+docs/api/
+
+# ================================
+# Misc
+# ================================
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Parcel cache
+.parcel-cache/
+
+# Turbo
+.turbo/
+
+# Vercel
+.vercel/
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test/
+
+# Dependency directories
+jspm_packages/
+bower_components/
+
+# Compiled binary addons
+build/Release/
+
+# Grunt intermediate storage
+.grunt
+
+# Snowpack dependency directory
+web_modules/
