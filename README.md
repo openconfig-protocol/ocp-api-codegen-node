@@ -51,17 +51,26 @@ ocp-codegen ./api-schema.json --validate
 
 ## AI-Assisted Schema Generation
 
-You can use an LLM (Claude, GPT, etc.) to generate OCP schemas from your API documentation. Copy the prompt below and provide your API docs:
+Use an LLM to automatically generate OCP schemas from API documentation. Choose the prompt that matches your situation:
+
+### Option 1: From a URL (Web Scraping)
+
+Use this when you have a link to online API documentation. Requires an LLM with web access (Claude with web fetch, ChatGPT with browsing, etc.)
 
 <details>
-<summary><strong>Click to expand the LLM prompt</strong></summary>
+<summary><strong>Click to expand URL prompt</strong></summary>
 
 ```
-You are an API schema generator. Your task is to analyze API documentation and generate a valid OCP (Open Config Protocol) schema in JSON format.
+You are an API schema generator. Your task is to fetch and analyze API documentation from a URL, then generate a valid OCP (Open Config Protocol) schema in JSON format.
+
+## Instructions
+
+1. Fetch the API documentation from the provided URL
+2. Navigate through all available pages/sections to find ALL endpoints
+3. Extract endpoint details: methods, paths, parameters, request bodies, and responses
+4. Generate a complete OCP schema
 
 ## OCP Schema Structure
-
-Generate a JSON object with this structure:
 
 {
   "$ocp": {
@@ -73,8 +82,7 @@ Generate a JSON object with this structure:
     "base_url": "https://api.example.com",
     "auth": {
       "type": "bearer" | "api_key" | "oauth2_client_credentials",
-      // For oauth2_client_credentials, also include:
-      "token_endpoint": "/oauth/token"
+      "token_endpoint": "/oauth/token"  // only for oauth2_client_credentials
     }
   },
   "endpoints": {
@@ -111,7 +119,80 @@ Generate a JSON object with this structure:
 3. Use :param syntax for path parameters (e.g., "/users/:id")
 4. Supported types: "string", "integer", "number", "boolean", "array", "object"
 5. Mark parameters as required: true only if they are mandatory
-6. Create descriptive response type names in PascalCase (e.g., "User", "Order", "ProductList")
+6. Create descriptive response type names in PascalCase (e.g., "User", "Order")
+7. Set pagination: true for list endpoints that support pagination
+8. Include the auth type that matches the API's authentication method
+9. Explore ALL linked pages to capture every endpoint
+
+## Your Task
+
+Fetch and analyze the API documentation at this URL, then generate a complete OCP schema:
+
+[PASTE API DOCUMENTATION URL HERE]
+```
+
+</details>
+
+### Option 2: From Text (Paste Documentation)
+
+Use this when you have API documentation as text (copied from a PDF, internal docs, etc.)
+
+<details>
+<summary><strong>Click to expand text prompt</strong></summary>
+
+```
+You are an API schema generator. Your task is to analyze API documentation and generate a valid OCP (Open Config Protocol) schema in JSON format.
+
+## OCP Schema Structure
+
+{
+  "$ocp": {
+    "type": "rest",
+    "version": "1.0.0"
+  },
+  "meta": {
+    "name": "api-name-here",
+    "base_url": "https://api.example.com",
+    "auth": {
+      "type": "bearer" | "api_key" | "oauth2_client_credentials",
+      "token_endpoint": "/oauth/token"  // only for oauth2_client_credentials
+    }
+  },
+  "endpoints": {
+    "group_name": {
+      "endpoint_name": {
+        "method": "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
+        "path": "/path/:param",
+        "summary": "Brief description",
+        "params": {
+          "param": { "type": "string", "required": true, "description": "..." }
+        },
+        "query": {
+          "filter": { "type": "string", "required": false }
+        },
+        "body": {
+          "fields": {
+            "field_name": { "type": "string", "required": true }
+          }
+        },
+        "response": {
+          "type": "ResponseTypeName",
+          "array": true | false
+        },
+        "pagination": true | false
+      }
+    }
+  }
+}
+
+## Rules
+
+1. Group related endpoints logically (e.g., "users", "orders", "products")
+2. Use snake_case for endpoint names and group names
+3. Use :param syntax for path parameters (e.g., "/users/:id")
+4. Supported types: "string", "integer", "number", "boolean", "array", "object"
+5. Mark parameters as required: true only if they are mandatory
+6. Create descriptive response type names in PascalCase (e.g., "User", "Order")
 7. Set pagination: true for list endpoints that support pagination
 8. Include the auth type that matches the API's authentication method
 
@@ -126,13 +207,14 @@ Analyze the following API documentation and generate a complete OCP schema. Incl
 
 </details>
 
-### Example Workflow
+### Workflow
 
-1. Copy the prompt above
-2. Paste your API documentation after the `---`
+1. Choose the appropriate prompt above
+2. Add your URL or paste your documentation
 3. Send to your preferred LLM
 4. Save the generated JSON as `api-schema.json`
-5. Run: `ocp-codegen api-schema.json -o ./src/sdk`
+5. Validate: `ocp-codegen api-schema.json --validate`
+6. Generate: `ocp-codegen api-schema.json -o ./src/sdk`
 
 ## OCP Schema Format
 
