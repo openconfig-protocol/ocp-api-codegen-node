@@ -60,76 +60,87 @@ Use this when you have a link to online API documentation. Requires an LLM with 
 <details>
 <summary><strong>Click to expand URL prompt</strong></summary>
 
-```
-You are an API schema generator. Your task is to fetch and analyze API documentation from a URL, then generate a valid OCP (Open Config Protocol) schema in JSON format.
+~~~
+You are an expert API analyst specializing in REST API documentation analysis and schema generation.
 
-## Instructions
+<task>
+Fetch the API documentation from the provided URL, thoroughly explore ALL pages and sections, then generate a complete OCP (Open Config Protocol) schema.
+</task>
 
-1. Fetch the API documentation from the provided URL
-2. Navigate through all available pages/sections to find ALL endpoints
-3. Extract endpoint details: methods, paths, parameters, request bodies, and responses
-4. Generate a complete OCP schema
+<instructions>
+1. Fetch the main documentation URL
+2. Identify and explore ALL linked pages (endpoints, authentication, pagination, etc.)
+3. Extract every endpoint with its method, path, parameters, request body, and response
+4. Determine the authentication method used
+5. Note any pagination patterns
+6. Generate the OCP schema
+7. Verify completeness before outputting
+</instructions>
 
-## OCP Schema Structure
-
+<schema_format>
 {
-  "$ocp": {
-    "type": "rest",
-    "version": "1.0.0"
-  },
+  "$ocp": { "type": "rest", "version": "1.0.0" },
   "meta": {
-    "name": "api-name-here",
+    "name": "api-name-in-kebab-case",
     "base_url": "https://api.example.com",
-    "auth": {
-      "type": "bearer" | "api_key" | "oauth2_client_credentials",
-      "token_endpoint": "/oauth/token"  // only for oauth2_client_credentials
-    }
+    "auth": { "type": "bearer|api_key|oauth2_client_credentials", "token_endpoint": "/oauth/token" }
   },
   "endpoints": {
-    "group_name": {
+    "resource_group": {
       "endpoint_name": {
-        "method": "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
-        "path": "/path/:param",
+        "method": "GET|POST|PUT|PATCH|DELETE",
+        "path": "/resources/:id",
         "summary": "Brief description",
-        "params": {
-          "param": { "type": "string", "required": true, "description": "..." }
-        },
-        "query": {
-          "filter": { "type": "string", "required": false }
-        },
-        "body": {
-          "fields": {
-            "field_name": { "type": "string", "required": true }
-          }
-        },
-        "response": {
-          "type": "ResponseTypeName",
-          "array": true | false
-        },
-        "pagination": true | false
+        "params": { "id": { "type": "string", "required": true } },
+        "query": { "limit": { "type": "integer", "required": false } },
+        "body": { "fields": { "name": { "type": "string", "required": true } } },
+        "response": { "type": "ResourceName", "array": false },
+        "pagination": false
       }
     }
   }
 }
+</schema_format>
 
-## Rules
+<rules>
+- Group endpoints by resource (users, orders, products, etc.)
+- Use snake_case for group and endpoint names
+- Use :param for path parameters (e.g., /users/:id)
+- Types: "string", "integer", "number", "boolean", "array", "object"
+- Response type names in PascalCase (User, Order, Product)
+- Set "pagination": true for list endpoints that return paginated results
+- Omit optional sections (params, query, body) if not applicable
+- If auth method is unclear, use "bearer" as default
+- If base_url has environment variations, use the production URL
+</rules>
 
-1. Group related endpoints logically (e.g., "users", "orders", "products")
-2. Use snake_case for endpoint names and group names
-3. Use :param syntax for path parameters (e.g., "/users/:id")
-4. Supported types: "string", "integer", "number", "boolean", "array", "object"
-5. Mark parameters as required: true only if they are mandatory
-6. Create descriptive response type names in PascalCase (e.g., "User", "Order")
-7. Set pagination: true for list endpoints that support pagination
-8. Include the auth type that matches the API's authentication method
-9. Explore ALL linked pages to capture every endpoint
+<example>
+Input: "GET /users - List all users, GET /users/{id} - Get user by ID, POST /users - Create user (requires name, email)"
 
-## Your Task
+Output:
+{
+  "$ocp": { "type": "rest", "version": "1.0.0" },
+  "meta": { "name": "example-api", "base_url": "https://api.example.com", "auth": { "type": "bearer" } },
+  "endpoints": {
+    "users": {
+      "list": { "method": "GET", "path": "/users", "response": { "type": "User", "array": true }, "pagination": true },
+      "get": { "method": "GET", "path": "/users/:id", "params": { "id": { "type": "string", "required": true } }, "response": { "type": "User" } },
+      "create": { "method": "POST", "path": "/users", "body": { "fields": { "name": { "type": "string", "required": true }, "email": { "type": "string", "required": true } } }, "response": { "type": "User" } }
+    }
+  }
+}
+</example>
 
-Fetch and analyze the API documentation at this URL, then generate a complete OCP schema:
+<output_instructions>
+- Output ONLY the JSON schema, no explanations or markdown code fences
+- Ensure valid JSON (proper commas, quotes, brackets)
+- Before outputting, verify: Did I capture ALL endpoints? Is the JSON valid?
+</output_instructions>
 
+<url>
 [PASTE API DOCUMENTATION URL HERE]
-```
+</url>
+~~~
 
 </details>
 
@@ -140,81 +151,100 @@ Use this when you have API documentation as text (copied from a PDF, internal do
 <details>
 <summary><strong>Click to expand text prompt</strong></summary>
 
-```
-You are an API schema generator. Your task is to analyze API documentation and generate a valid OCP (Open Config Protocol) schema in JSON format.
+~~~
+You are an expert API analyst specializing in REST API documentation analysis and schema generation.
 
-## OCP Schema Structure
+<task>
+Analyze the provided API documentation and generate a complete OCP (Open Config Protocol) schema capturing ALL endpoints.
+</task>
 
+<instructions>
+1. Read through the entire documentation carefully
+2. Identify every endpoint (method + path combination)
+3. Extract parameters, request bodies, and response types
+4. Determine the authentication method
+5. Note any pagination patterns
+6. Generate the OCP schema
+7. Verify completeness before outputting
+</instructions>
+
+<schema_format>
 {
-  "$ocp": {
-    "type": "rest",
-    "version": "1.0.0"
-  },
+  "$ocp": { "type": "rest", "version": "1.0.0" },
   "meta": {
-    "name": "api-name-here",
+    "name": "api-name-in-kebab-case",
     "base_url": "https://api.example.com",
-    "auth": {
-      "type": "bearer" | "api_key" | "oauth2_client_credentials",
-      "token_endpoint": "/oauth/token"  // only for oauth2_client_credentials
-    }
+    "auth": { "type": "bearer|api_key|oauth2_client_credentials", "token_endpoint": "/oauth/token" }
   },
   "endpoints": {
-    "group_name": {
+    "resource_group": {
       "endpoint_name": {
-        "method": "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
-        "path": "/path/:param",
+        "method": "GET|POST|PUT|PATCH|DELETE",
+        "path": "/resources/:id",
         "summary": "Brief description",
-        "params": {
-          "param": { "type": "string", "required": true, "description": "..." }
-        },
-        "query": {
-          "filter": { "type": "string", "required": false }
-        },
-        "body": {
-          "fields": {
-            "field_name": { "type": "string", "required": true }
-          }
-        },
-        "response": {
-          "type": "ResponseTypeName",
-          "array": true | false
-        },
-        "pagination": true | false
+        "params": { "id": { "type": "string", "required": true } },
+        "query": { "limit": { "type": "integer", "required": false } },
+        "body": { "fields": { "name": { "type": "string", "required": true } } },
+        "response": { "type": "ResourceName", "array": false },
+        "pagination": false
       }
     }
   }
 }
+</schema_format>
 
-## Rules
+<rules>
+- Group endpoints by resource (users, orders, products, etc.)
+- Use snake_case for group and endpoint names
+- Use :param for path parameters (e.g., /users/:id)
+- Types: "string", "integer", "number", "boolean", "array", "object"
+- Response type names in PascalCase (User, Order, Product)
+- Set "pagination": true for list endpoints that return paginated results
+- Omit optional sections (params, query, body) if not applicable
+- If auth method is unclear, use "bearer" as default
+- If base_url has environment variations, use the production URL
+</rules>
 
-1. Group related endpoints logically (e.g., "users", "orders", "products")
-2. Use snake_case for endpoint names and group names
-3. Use :param syntax for path parameters (e.g., "/users/:id")
-4. Supported types: "string", "integer", "number", "boolean", "array", "object"
-5. Mark parameters as required: true only if they are mandatory
-6. Create descriptive response type names in PascalCase (e.g., "User", "Order")
-7. Set pagination: true for list endpoints that support pagination
-8. Include the auth type that matches the API's authentication method
+<example>
+Input: "GET /users - List all users, GET /users/{id} - Get user by ID, POST /users - Create user (requires name, email)"
 
-## Your Task
+Output:
+{
+  "$ocp": { "type": "rest", "version": "1.0.0" },
+  "meta": { "name": "example-api", "base_url": "https://api.example.com", "auth": { "type": "bearer" } },
+  "endpoints": {
+    "users": {
+      "list": { "method": "GET", "path": "/users", "response": { "type": "User", "array": true }, "pagination": true },
+      "get": { "method": "GET", "path": "/users/:id", "params": { "id": { "type": "string", "required": true } }, "response": { "type": "User" } },
+      "create": { "method": "POST", "path": "/users", "body": { "fields": { "name": { "type": "string", "required": true }, "email": { "type": "string", "required": true } } }, "response": { "type": "User" } }
+    }
+  }
+}
+</example>
 
-Analyze the following API documentation and generate a complete OCP schema. Include ALL endpoints you find. Be thorough and accurate.
+<output_instructions>
+- Output ONLY the JSON schema, no explanations or markdown code fences
+- Ensure valid JSON (proper commas, quotes, brackets)
+- Before outputting, verify: Did I capture ALL endpoints? Is the JSON valid?
+</output_instructions>
 
----
-
+<documentation>
 [PASTE YOUR API DOCUMENTATION HERE]
-```
+</documentation>
+~~~
 
 </details>
 
 ### Workflow
 
 1. Choose the appropriate prompt above
-2. Add your URL or paste your documentation
-3. Send to your preferred LLM
-4. Save the generated JSON as `api-schema.json`
+2. Replace the placeholder with your URL or documentation text
+3. Send to your preferred LLM (Claude, GPT-4, etc.)
+4. Copy the JSON output and save as `api-schema.json`
 5. Validate: `ocp-codegen api-schema.json --validate`
 6. Generate: `ocp-codegen api-schema.json -o ./src/sdk`
+
+> **Tip:** If the output includes markdown code fences or explanations, ask the LLM: "Output only the raw JSON, nothing else."
 
 ## OCP Schema Format
 
