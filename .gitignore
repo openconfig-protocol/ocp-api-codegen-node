@@ -47,6 +47,7 @@ out/
 
 # Generated SDK output (from this codegen tool)
 generated/
+!examples/generated/
 sdk-output/
 
 # TypeScript build info

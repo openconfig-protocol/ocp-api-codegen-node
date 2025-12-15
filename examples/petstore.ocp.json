@@ -1,0 +1,245 @@
+{
+  "$ocp": {
+    "type": "rest",
+    "version": "1.0.0"
+  },
+  "meta": {
+    "name": "petstore-api",
+    "base_url": "https://api.petstore.example.com/v1",
+    "auth": {
+      "type": "bearer"
+    }
+  },
+  "pagination": {
+    "type": "cursor",
+    "param_name": "cursor",
+    "response_path": "pagination.next_cursor",
+    "default_limit": 20,
+    "max_limit": 100
+  },
+  "endpoints": {
+    "pets": {
+      "list": {
+        "method": "GET",
+        "path": "/pets",
+        "summary": "List all pets with optional filtering",
+        "query": {
+          "status": {
+            "type": "string",
+            "required": false,
+            "description": "Filter by pet status",
+            "enum": ["available", "pending", "sold"]
+          },
+          "limit": {
+            "type": "integer",
+            "required": false,
+            "description": "Maximum number of pets to return"
+          },
+          "cursor": {
+            "type": "string",
+            "required": false,
+            "description": "Pagination cursor"
+          }
+        },
+        "response": {
+          "type": "Pet",
+          "array": true
+        },
+        "pagination": true
+      },
+      "get": {
+        "method": "GET",
+        "path": "/pets/:petId",
+        "summary": "Get a pet by ID",
+        "params": {
+          "petId": {
+            "type": "string",
+            "required": true,
+            "description": "The pet's unique identifier"
+          }
+        },
+        "response": {
+          "type": "Pet"
+        }
+      },
+      "create": {
+        "method": "POST",
+        "path": "/pets",
+        "summary": "Create a new pet",
+        "body": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "required": true,
+              "description": "The pet's name"
+            },
+            "species": {
+              "type": "string",
+              "required": true,
+              "description": "Type of animal (dog, cat, bird, etc.)"
+            },
+            "breed": {
+              "type": "string",
+              "required": false,
+              "description": "The pet's breed"
+            },
+            "age": {
+              "type": "integer",
+              "required": false,
+              "description": "Age in years"
+            },
+            "status": {
+              "type": "string",
+              "required": false,
+              "description": "Availability status"
+            }
+          }
+        },
+        "response": {
+          "type": "Pet"
+        }
+      },
+      "update": {
+        "method": "PUT",
+        "path": "/pets/:petId",
+        "summary": "Update an existing pet",
+        "params": {
+          "petId": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "body": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "required": false
+            },
+            "status": {
+              "type": "string",
+              "required": false
+            }
+          }
+        },
+        "response": {
+          "type": "Pet"
+        }
+      },
+      "delete": {
+        "method": "DELETE",
+        "path": "/pets/:petId",
+        "summary": "Delete a pet",
+        "params": {
+          "petId": {
+            "type": "string",
+            "required": true
+          }
+        }
+      }
+    },
+    "orders": {
+      "list": {
+        "method": "GET",
+        "path": "/orders",
+        "summary": "List all orders",
+        "query": {
+          "status": {
+            "type": "string",
+            "required": false,
+            "enum": ["placed", "approved", "delivered"]
+          }
+        },
+        "response": {
+          "type": "Order",
+          "array": true
+        },
+        "pagination": true
+      },
+      "get": {
+        "method": "GET",
+        "path": "/orders/:orderId",
+        "summary": "Get order by ID",
+        "params": {
+          "orderId": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "response": {
+          "type": "Order"
+        }
+      },
+      "create": {
+        "method": "POST",
+        "path": "/orders",
+        "summary": "Place a new order",
+        "body": {
+          "fields": {
+            "petId": {
+              "type": "string",
+              "required": true,
+              "description": "ID of the pet to order"
+            },
+            "quantity": {
+              "type": "integer",
+              "required": true
+            },
+            "shipDate": {
+              "type": "string",
+              "required": false,
+              "description": "ISO 8601 date string"
+            }
+          }
+        },
+        "response": {
+          "type": "Order"
+        }
+      },
+      "cancel": {
+        "method": "DELETE",
+        "path": "/orders/:orderId",
+        "summary": "Cancel an order",
+        "params": {
+          "orderId": {
+            "type": "string",
+            "required": true
+          }
+        }
+      }
+    },
+    "users": {
+      "me": {
+        "method": "GET",
+        "path": "/users/me",
+        "summary": "Get current authenticated user",
+        "response": {
+          "type": "User"
+        }
+      },
+      "update_me": {
+        "method": "PATCH",
+        "path": "/users/me",
+        "summary": "Update current user profile",
+        "body": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "required": false
+            },
+            "email": {
+              "type": "string",
+              "required": false
+            },
+            "phone": {
+              "type": "string",
+              "required": false
+            }
+          }
+        },
+        "response": {
+          "type": "User"
+        }
+      }
+    }
+  }
+}
