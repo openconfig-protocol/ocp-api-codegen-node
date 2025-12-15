@@ -1,5 +1,9 @@
 # OCP API Codegen (Node.js)
 
+[![npm version](https://img.shields.io/npm/v/@openconfig-protocol/codegen.svg)](https://www.npmjs.com/package/@openconfig-protocol/codegen)
+[![npm downloads](https://img.shields.io/npm/dm/@openconfig-protocol/codegen.svg)](https://www.npmjs.com/package/@openconfig-protocol/codegen)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A Node.js SDK generator for REST APIs using the Open Config Protocol (OCP) schema format.
 
 ## Overview
@@ -12,13 +16,13 @@ OCP API Codegen reads a declarative JSON schema that describes your REST API and
 ## Installation
 
 ```bash
-npm install -g ocp-api-codegen-node
+npm install -g @openconfig-protocol/codegen
 ```
 
 Or use directly with npx:
 
 ```bash
-npx ocp-api-codegen-node ./api-schema.json -o ./src/generated
+npx @openconfig-protocol/codegen ./api-schema.json -o ./src/generated
 ```
 
 ## Usage
@@ -27,13 +31,13 @@ npx ocp-api-codegen-node ./api-schema.json -o ./src/generated
 
 ```bash
 # Generate SDK from schema
-ocp-api-codegen ./api-schema.json
+ocp-codegen ./api-schema.json
 
 # Generate SDK to specific directory
-ocp-api-codegen ./api-schema.json -o ./src/generated
+ocp-codegen ./api-schema.json -o ./src/generated
 
 # Validate schema only (no generation)
-ocp-api-codegen ./api-schema.json --validate
+ocp-codegen ./api-schema.json --validate
 ```
 
 ### CLI Options

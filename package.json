@@ -1,10 +1,10 @@
 {
-  "name": "ocp-api-codegen-node",
+  "name": "@openconfig-protocol/codegen",
   "version": "1.0.0",
-  "description": "Open Config Protocol - Node.js SDK generator for REST APIs",
+  "description": "Generate typed Node.js/TypeScript SDKs from OCP schema files",
   "main": "lib/codegen.js",
   "bin": {
-    "ocp-api-codegen": "./bin/ocp-api-codegen.js"
+    "ocp-codegen": "./bin/ocp-api-codegen.js"
   },
   "files": [
     "bin",
@@ -22,15 +22,23 @@
     "api",
     "rest",
     "typescript",
-    "node"
+    "node",
+    "generator"
   ],
-  "author": "",
+  "author": "Jeffrie Budde",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourname/ocp-api-codegen-node"
+    "url": "git+https://github.com/openconfig-protocol/ocp-api-codegen-node.git"
+  },
+  "homepage": "https://github.com/openconfig-protocol/ocp-api-codegen-node#readme",
+  "bugs": {
+    "url": "https://github.com/openconfig-protocol/ocp-api-codegen-node/issues"
   },
   "engines": {
     "node": ">=14.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
