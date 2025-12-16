@@ -4,13 +4,21 @@
 [![npm downloads](https://img.shields.io/npm/dm/@openconfig-protocol/codegen.svg)](https://www.npmjs.com/package/@openconfig-protocol/codegen)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Note:** This project is not affiliated with [OpenConfig](https://www.openconfig.net/), the network device modeling initiative (YANG/gNMI). "OCP" here stands for "Open Config Protocol" — a lightweight REST API schema format.
+> **Note:** This project is not affiliated with [OpenConfig](https://www.openconfig.net/), the network device modeling initiative (YANG/gNMI). "OCP" here stands for "Open Config Protocol" — a family of lightweight, human-readable configuration standards.
 
-A Node.js SDK generator for REST APIs using the Open Config Protocol (OCP) schema format.
+A Node.js SDK generator for REST APIs using the OCP REST schema format.
 
 ## What is OCP?
 
-**Open Config Protocol (OCP)** is a minimal, human-readable JSON schema format for describing REST APIs. It generates fully-typed TypeScript/JavaScript SDKs with zero dependencies.
+**Open Config Protocol (OCP)** is an ideology and family of minimal, human-readable configuration standards. Each OCP standard targets a specific domain:
+
+| Standard | Domain | Description |
+|----------|--------|-------------|
+| **OCP REST** | REST APIs | Schema format for generating typed API clients (this project) |
+| *OCP RPC* | RPC APIs | Coming soon |
+| *OCP GraphQL* | GraphQL APIs | Coming soon |
+
+This project implements **OCP REST** — a schema format for describing REST APIs that generates fully-typed TypeScript/JavaScript SDKs with zero dependencies.
 
 ### Why OCP vs OpenAPI?
 
